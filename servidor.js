@@ -1,13 +1,17 @@
-const express = require('express')
-const bodyParser = require('body-parser')
-const app = express()
 const porta = 3003
-const bancodedados = require('./bancodedados')
 
+const express = require('express')
+const app = express()
+const bancodedados = require('./bancodedados.js')
+
+const bodyParser = require('body-parser')
 app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({
-  extended: true 
-}))
+app.use(bodyParser.urlencoded({ extended: true }))
+
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send('Algo deu errado!');
+});
 
 app.get('/produtos', (req, res, next) => {
     res.send(bancodedados.getProdutos())
@@ -25,8 +29,8 @@ app.post('/produtos', (req, res, next) => {
     res.send(produto)
 })
 
-app.put('/produtos', (req, res, next) => {
-    const produto = bancodedados.salvarProduto({
+app.put('/produtos/:id', (req, res, next) => {
+    const produto = bancodedados.alterarProduto({
         id: req.params.id,
         nome: req.body.nome,
         preco: req.body.preco

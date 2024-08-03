@@ -1,20 +1,26 @@
 const sequence = {
   _id: 1,
-  getId() { return this._id++ }
+  get id() { return this._id++ }
 }
 
 const produtos = {}
 
 function salvarProduto(produto) {
-  if (!produto.id) {
-    produto.id = sequence.id
+  produto.id = sequence.id
+  produtos[produto.id] = produto
+  return produto
+}
+
+function alterarProduto(produto) {
+  if (!produtos[produto.id]) {
+    throw new Error(`Produto com ID ${produto.id} não encontrado.`);
   }
-  produtos[produto.id] = produto;
+  produtos[produto.id] = produto
   return produto
 }
 
 function getProduto(id) {
-  return produtos[id] || {}
+  return produtos[id] || null
 }
 
 function getProdutos() {
@@ -27,4 +33,4 @@ function excluirProduto(id) {
   return produto
 }
 
-module.exports = { salvarProduto, getProduto, getProdutos, excluirProduto}
+module.exports = { salvarProduto, getProduto, getProdutos, excluirProduto, alterarProduto}
