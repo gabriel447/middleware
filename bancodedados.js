@@ -12,9 +12,6 @@ function salvarProduto(produto) {
 }
 
 function alterarProduto(produto) {
-  if (!produtos[produto.id]) {
-    throw new Error(`Produto com ID ${produto.id} não encontrado.`);
-  }
   produtos[produto.id] = produto
   return produto
 }
